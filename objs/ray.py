@@ -11,3 +11,10 @@ class Ray():
 
     def direction(self):
         return self._direction
+
+    def extension_point(self, t):
+        return self._origin + np.multiply(self._direction, t)
+
+    def move_origin(self, t):
+        self._origin = self.extension_point(t)
+        return self

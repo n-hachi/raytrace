@@ -1,10 +1,12 @@
 import numpy as np
 import math
+from .ray import Ray
 
 class Sphere():
-    def __init__(self, center, radius):
+    def __init__(self, center, radius, color):
         self._center = center
         self._radius = radius
+        self._color = color
 
     # This methos is besed on the below page.
     # https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
@@ -13,11 +15,11 @@ class Sphere():
         tca = np.dot(l, ray.direction())
 
         if tca <= 0:
-            return False
+            return None
 
         square_d = np.linalg.norm(l)**2 - tca**2
         if square_d > (self._radius**2):
-            return False
+            return None
 
         thc = np.sqrt(self._radius**2 - square_d)
         t0 = tca - thc
@@ -26,6 +28,13 @@ class Sphere():
             t0 = t1
 
         if t0 < 0:
-            return False
+            return None
 
-        return True
+        return ray.extension_point(t0)
+
+    def color(self, ray):
+        p = self.intersect(ray)
+        d = np.subtract(self._center, p)
+        r = Ray(p, d)
+        shade = np.dot(ray.direction(), r.direction())
+        return tuple(np.floor(np.multiply(self._color, shade)).astype(int))
