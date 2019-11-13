@@ -15,11 +15,11 @@ class Sphere():
         tca = np.dot(l, ray.direction())
 
         if tca <= 0:
-            return None
+            return None, None
 
         square_d = np.linalg.norm(l)**2 - tca**2
         if square_d > (self._radius**2):
-            return None
+            return None, None
 
         thc = np.sqrt(self._radius**2 - square_d)
         t0 = tca - thc
@@ -28,12 +28,12 @@ class Sphere():
             t0 = t1
 
         if t0 < 0:
-            return None
+            return None, None
 
-        return ray.extension_point(t0)
+        return t0, ray.extension_point(t0)
 
     def color(self, ray):
-        p = self.intersect(ray)
+        _, p = self.intersect(ray)
         d = np.subtract(self._center, p)
         r = Ray(p, d)
         shade = np.dot(ray.direction(), r.direction())

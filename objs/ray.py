@@ -18,3 +18,17 @@ class Ray():
     def move_origin(self, t):
         self._origin = self.extension_point(t)
         return self
+
+    def color(self, objects):
+        o = None
+        t = 1e+5
+        for o2 in objects:
+            t2, _ = o2.intersect(self)
+            if (t2 is not None) and (t2 < t):
+                t = t2
+                o = o2
+
+        if o is None:
+            return (0, 0, 0)
+
+        return o.color(self)

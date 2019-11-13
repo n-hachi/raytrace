@@ -5,7 +5,7 @@ Raytracing in python.
 
 ## Output
 
-![output](./pics/ver3.png)
+![output](./pics/ver4.png)
 
 ## Requirement
 

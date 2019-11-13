@@ -9,7 +9,10 @@ FOV = math.pi / 3.0
 ORIGIN = np.array([0, 0, 0])
 
 def main():
-    sphere = objs.Sphere([0, 0, 4], 1, (255, 0, 0))
+    objects = [
+            objs.Sphere([0, 0, 4], 1, (255, 0, 0)),
+            objs.Circle([0, 4, 15], 8, [0, 1, 0], (0, 255, 0)),
+            ]
 
     img = Image.new('RGB', (WIDTH, HEIGHT))
     for y in range(HEIGHT):
@@ -18,12 +21,7 @@ def main():
             dir_y = (y + 0.5) - (HEIGHT / 2)
             dir_z = HEIGHT / (2 * math.tan(FOV / 2))
             ray = objs.Ray(ORIGIN, [dir_x, dir_y, dir_z])
-
-            p = sphere.intersect(ray)
-            if p is not None:
-                img.putpixel((x, y), sphere.color(ray))
-            else:
-                img.putpixel((x, y), (0, 0, 0))
+            img.putpixel((x, y), ray.color(objects))
 
     img.save('output.png')
 
