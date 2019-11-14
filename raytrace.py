@@ -10,8 +10,9 @@ ORIGIN = np.array([0, 0, 0])
 
 def main():
     objects = [
-            objs.Sphere([0, 0, 4], 1, (255, 0, 0)),
+            objs.Sphere([-2, 0, 4], 1, (255, 0, 0)),
             objs.Circle([0, 4, 15], 8, [0, 1, 0], (0, 255, 0)),
+            objs.Triangle([0, -1, 4], [6, -1, 8], [3, 2, 6], (0, 0, 255)),
             ]
 
     img = Image.new('RGB', (WIDTH, HEIGHT))
