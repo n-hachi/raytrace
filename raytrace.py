@@ -11,9 +11,9 @@ ORIGIN = np.array([0, 0, 0])
 def main():
     objects = [
             objs.Sphere([-1, 0, 4], 1, (255, 0, 0)),
-            objs.Circle([0, 4, 15], 8, [0, 1, 0], (0, 255, 0)),
+            objs.ReflectiveCircle([0, 2, 3], 8, [0, 1, 0], (0, 255, 0)),
             objs.Triangle([0, -1, 4], [6, -1, 8], [3, 2, 6], (0, 0, 255)),
-            objs.CheckerdSphere([0, -2, 8], 2, (255, 255, 0)),
+            objs.CheckerdSphere([0, -2, 8], 2, (0, 255, 0)),
             ]
 
     img = Image.new('RGB', (WIDTH, HEIGHT))

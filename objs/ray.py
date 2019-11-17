@@ -29,6 +29,9 @@ class Ray():
                 o = o2
 
         if o is None:
-            return (0, 0, 0)
+            return (31, 31, 31)
+
+        if hasattr(o, 'IsReflective'):
+            return o.color(self, objects)
 
         return o.color(self)
