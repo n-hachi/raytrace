@@ -1,8 +1,10 @@
 import numpy as np
+
+from .plane import AbsPlane
 from .ray import Ray
 
-class Triangle():
-    def __init__(self, p1, p2, p3, color):
+class Triangle(AbsPlane):
+    def __init__(self, p1, p2, p3, surface_color):
         self._p1 = p1
         self._p2 = p2
         self._p3 = p3
@@ -11,9 +13,10 @@ class Triangle():
         self._v3to1 = np.subtract(self._p1, self._p3)
 
         n = np.cross(self._v1to2, self._v2to3)
-        self._normal = n / np.linalg.norm(n)
+        self._surface_color = surface_color
 
-        self._color = color
+        normal = n / np.linalg.norm(n)
+        super().__init__(normal)
 
     def intersect(self, ray):
         d = np.dot(ray.direction(), self._normal)
@@ -52,7 +55,3 @@ class Triangle():
             return None, None
 
         return t, p
-
-    def color(self, ray):
-        shade = abs(np.dot(ray.direction(), self._normal))
-        return tuple(np.floor(np.multiply(self._color, shade)).astype(int))

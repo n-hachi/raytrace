@@ -19,19 +19,26 @@ class Ray():
         self._origin = self.extension_point(t)
         return self
 
-    def color(self, objects):
+    def intersect(self, objects):
         o = None
-        t = 1e+5
+        t = 1e+10   # Large value
+        p = None
+
         for o2 in objects:
-            t2, _ = o2.intersect(self)
-            if (t2 is not None) and (t2 < t):
-                t = t2
+            t2, p2 = o2.intersect(self)
+            if t2 is None:
+                continue
+            if t2 < t:
                 o = o2
+                t = t2
+                p = p2
 
-        if o is None:
-            return (31, 31, 31)
+        return o, t, p
 
-        if hasattr(o, 'IsReflective'):
-            return o.color(self, objects)
+    def color(self, objects, lights):
+        o, t, _ = self.intersect(objects)
 
-        return o.color(self)
+        if o is not None:
+            return o.color(self, objects, lights)
+
+        return np.array([64, 64, 64])

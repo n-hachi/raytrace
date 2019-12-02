@@ -1,13 +1,14 @@
 import numpy as np
 import math
 from .ray import Ray
+from .plane import AbsPlane
 
-class Circle():
-    def __init__(self, center, radius, normal, color):
+class Circle(AbsPlane):
+    def __init__(self, center, radius, normal, surface_color):
+        super().__init__(normal)
         self._center = center
         self._radius = radius
-        self._normal = normal
-        self._color = color
+        self._surface_color = surface_color
 
     # This method was referred to the following page.
     # https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection
@@ -32,7 +33,3 @@ class Circle():
             return None, None
 
         return t, p
-
-    def color(self, ray):
-        shade = abs(np.dot(ray.direction(), self._normal))
-        return tuple(np.floor(np.multiply(self._color, shade)).astype(int))

@@ -1,12 +1,29 @@
 import numpy as np
 import math
-from .ray import Ray
 
-class Sphere():
-    def __init__(self, center, radius, color):
+from .ray import Ray
+from .objs import AbsObject
+
+class Sphere(AbsObject):
+
+    def __init__(self, center, radius, surface_color):
         self._center = center
         self._radius = radius
-        self._color = color
+        self._surface_color = surface_color
+
+
+    def center(self):
+        return self._center
+
+    def normal(self, ray):
+        _, p = self.intersect(ray)
+
+        if p is None:
+            return None
+
+        d = p - self.center()
+        return Ray(p, d)
+
 
     # This methos is besed on the below page.
     # https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
@@ -32,9 +49,30 @@ class Sphere():
 
         return t0, ray.extension_point(t0)
 
-    def color(self, ray):
+    # surface
+    #  `,       o(origin)
+    #    \        ,`
+    #     `     ,` |
+    #      |  ,`   | ov(orthographic vector)
+    #      |,`     v
+    #      * ----->*---> n(normal)
+    #      |`,rn(resized normal)
+    #      |  `,
+    #      '    `,
+    #     /       `,
+    #   ,'       r(reflect)
+    #  '
+    def reflect(self, ray):
         _, p = self.intersect(ray)
-        d = np.subtract(self._center, p)
-        r = Ray(p, d)
-        shade = np.dot(ray.direction(), r.direction())
-        return tuple(np.floor(np.multiply(self._color, shade)).astype(int))
+        n = Ray(p, p - self.center())
+        cos = np.dot(ray.direction(), n.direction()) * -1
+        rn = np.multiply(n.direction(), cos)    # Resize normal
+
+        ov = np.add(ray.direction(), rn)        # Vector between origin ray and normal ray.
+        rd = rn + ov                            # Reflect vector direction.
+
+        # Create new ray.
+        _, p = self.intersect(ray)
+        p2 = np.add(p, np.multiply(rd, 1e-5))   # Move the origin of ray slightly forward.
+        return Ray(p2, rd)                      # Reflect ray.
+

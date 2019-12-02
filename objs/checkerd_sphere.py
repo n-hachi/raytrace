@@ -4,8 +4,8 @@ from .sphere import Sphere
 from .ray import Ray
 
 class CheckerdSphere(Sphere):
-    def color(self, ray):
-        c = super().color(ray)
+    def color(self, ray, objects, lights):
+        c = super().color(ray, objects, lights)
 
         _, p = super().intersect(ray)
         d = np.subtract(p, self._center)
@@ -18,6 +18,6 @@ class CheckerdSphere(Sphere):
         x = int((phy + math.pi) * 8 / math.pi)
         y = int(thete * 8 / math.pi)
 
-        is_color = ((x % 2) ^ (y % 2))
+        is_color = 1 if ((x % 2) ^ (y % 2)) else 0.1
 
-        return tuple(map(lambda x: int(x * is_color), c))
+        return np.multiply(c, is_color)
