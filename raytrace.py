@@ -2,6 +2,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 import math
 import objs
+from tqdm import tqdm
 
 HEIGHT = 480
 WIDTH = 640
@@ -23,7 +24,7 @@ def main():
             ]
 
     img = Image.new('RGB', (WIDTH, HEIGHT))
-    for y in range(HEIGHT):
+    for y in tqdm(range(HEIGHT)):
         for x in range(WIDTH):
             dir_x = (x + 0.5) - (WIDTH / 2)
             dir_y = (y + 0.5) - (HEIGHT / 2)
@@ -31,7 +32,9 @@ def main():
             ray = objs.Ray(ORIGIN, [dir_x, dir_y, dir_z])
             img.putpixel((x, y), tuple(ray.color(objects, lights).astype(int)))
 
+
     img.save('output.png')
+    print("Save file: output.png")
 
 if __name__ == '__main__':
     main()
